@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    
+
 
     void Start()
     {
@@ -13,20 +15,11 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetButtonDown("Jump")) 
         {
-            Debug.Log("Holding key");
+            Debug.Log("jumping");
         }
 
-        if (Input.GetKeyDown(KeyCode.Space)) 
-        {
-            Debug.Log("Key pressed");   
-        }
-
-        if (Input.GetKeyUp(KeyCode.Space))
-        {
-            Debug.Log("Key released");
-        }
+        Debug.Log(Input.GetAxisRaw("Horizontal"));
     }
 }
