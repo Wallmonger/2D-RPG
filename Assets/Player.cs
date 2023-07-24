@@ -4,15 +4,29 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    // Start is called before the first frame update
+
     void Start()
     {
-        
+
     }
 
-    // Update is called once per frame
+
     void Update()
     {
-        
+
+        if (Input.GetKey(KeyCode.Space))
+        {
+            Debug.Log("Holding key");
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space)) 
+        {
+            Debug.Log("Key pressed");   
+        }
+
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            Debug.Log("Key released");
+        }
     }
 }
