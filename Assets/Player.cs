@@ -4,22 +4,30 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    private float xInput;
+    public float moveSpeed;
+    public float jumpForce;
+    public Rigidbody2D rb;
     
-
 
     void Start()
     {
-
+        
     }
 
 
     void Update()
     {
+        rb.velocity = new Vector2(xInput * moveSpeed, rb.velocity.y);
+
+
+
         if (Input.GetButtonDown("Jump")) 
         {
-            Debug.Log("jumping");
+            rb.velocity += new Vector2(rb.velocity.x, jumpForce);
         }
 
-        Debug.Log(Input.GetAxisRaw("Horizontal"));
+        xInput = Input.GetAxisRaw("Horizontal");
+        Debug.Log(xInput);
     }
 }
