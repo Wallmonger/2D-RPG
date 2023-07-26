@@ -7,14 +7,17 @@ public class Player : MonoBehaviour
     // ALT + ENTER : Extract method to create function based on highlighted text
     // Right click and go to definition send to the function
     // ALT + ARROW UP : Put line in top
-
-
-    private float xInput;
-    [SerializeField] private float moveSpeed;
-    [SerializeField] private float jumpForce;
     private Rigidbody2D rb;
     private Animator anim;
-    
+
+    [SerializeField] private float moveSpeed;
+    [SerializeField] private float jumpForce;
+
+    private float xInput;
+
+    private int facingDir = 1;
+    private bool facingRight = true;
+
 
     void Start()
     {
@@ -27,6 +30,9 @@ public class Player : MonoBehaviour
     {
         Movement();
         CheckInput();
+
+        
+        FlipController();
         AnimatorControllers();
     }
 
@@ -56,5 +62,27 @@ public class Player : MonoBehaviour
         bool isMoving = rb.velocity.x != 0;
 
         anim.SetBool("isMoving", isMoving);
+    }
+
+    private void Flip()
+    {
+        // facingDir sera multiplié par -1 à chaque appel, ce qui aura pour effet de changer la direction automatiquement ( -1 * -1 = 1) 
+        facingDir = facingDir * -1;
+
+        // On inverse le booléen
+        facingRight = !facingRight;      
+        transform.Rotate(0, 180, 0);
+    }
+
+    public void FlipController()
+    {
+        // Si le personnage avance vers la droite et ne regarde pas à droite
+        if (rb.velocity.x > 0 && !facingRight) 
+            Flip();
+
+        // Si le personnage avance vers la gauche et regarde la droite
+        else if (rb.velocity.x < 0 && facingRight)
+            Flip();
+        
     }
 }
