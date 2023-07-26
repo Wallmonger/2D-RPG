@@ -41,7 +41,7 @@ public class Player : MonoBehaviour
 
     private void CollisionChecks()
     {
-        // Check if the character's gizmo hit the ground (character position, to down, distance to the layer, layer)
+        // Cast a ray against colliders in the scene (gameObject position, direction, max distance, LayerMask)
         isGrounded = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, whatIsGround);
     }
 
