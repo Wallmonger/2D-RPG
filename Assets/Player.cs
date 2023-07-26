@@ -18,6 +18,9 @@ public class Player : MonoBehaviour
     private int facingDir = 1;
     private bool facingRight = true;
 
+    private bool isGrounded;
+    [SerializeField] private float groundCheckDistance;
+    [SerializeField] private LayerMask whatIsGround;    
 
     void Start()
     {
@@ -30,10 +33,15 @@ public class Player : MonoBehaviour
     {
         Movement();
         CheckInput();
-
-        
+        CollisionChecks();
         FlipController();
         AnimatorControllers();
+    }
+
+    private void CollisionChecks()
+    {
+        // Check if the character's gizmo hit the ground (character position, to down, distance to the layer, layer)
+        isGrounded = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, whatIsGround);
     }
 
     private void CheckInput()
@@ -53,6 +61,8 @@ public class Player : MonoBehaviour
 
     private void Jump()
     {
+        // Allowing jump only if character's gizmo hit the floor
+        if (isGrounded)
         rb.velocity += new Vector2(rb.velocity.x, jumpForce);
     }
 
@@ -84,5 +94,11 @@ public class Player : MonoBehaviour
         else if (rb.velocity.x < 0 && facingRight)
             Flip();
         
+    }
+
+    private void OnDrawGizmos()
+    {
+        // Drawing a line to the feet of the character
+        Gizmos.DrawLine(transform.position, new Vector3 (transform.position.x, transform.position.y - groundCheckDistance));
     }
 }
