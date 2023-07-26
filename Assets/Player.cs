@@ -72,6 +72,7 @@ public class Player : MonoBehaviour
         // If player is moving, we set the boolean value to trigger the animation
         bool isMoving = rb.velocity.x != 0;
 
+        anim.SetFloat("yVelocity", rb.velocity.y);
         anim.SetBool("isMoving", isMoving);
         anim.SetBool("isGrounded", isGrounded);
     }
