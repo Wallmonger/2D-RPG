@@ -18,9 +18,10 @@ public class Player : MonoBehaviour
     private int facingDir = 1;
     private bool facingRight = true;
 
-    private bool isGrounded;
+    [Header("Collision info")]
     [SerializeField] private float groundCheckDistance;
     [SerializeField] private LayerMask whatIsGround;    
+    private bool isGrounded;
 
     void Start()
     {
