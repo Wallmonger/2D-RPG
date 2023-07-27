@@ -81,7 +81,8 @@ public class Player : MonoBehaviour
         // While dashTime don't hit 0, dash
         if (dashTime > 0)
         {
-            rb.velocity = new Vector2(xInput * dashSpeed, rb.velocity.y);
+            // While dashing, increase speed on x axis, set y to 0 to fly temporarily
+            rb.velocity = new Vector2(xInput * dashSpeed, 0);
         } 
         else
         {
@@ -106,6 +107,9 @@ public class Player : MonoBehaviour
         anim.SetFloat("yVelocity", rb.velocity.y);
         anim.SetBool("isMoving", isMoving);
         anim.SetBool("isGrounded", isGrounded);
+
+        // Trigger animation when dashTime > 0
+        anim.SetBool("isDashing", dashTime > 0);
     }
 
     private void Flip()
