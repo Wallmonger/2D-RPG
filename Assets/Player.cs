@@ -13,6 +13,11 @@ public class Player : MonoBehaviour
     [SerializeField] private float moveSpeed;
     [SerializeField] private float jumpForce;
 
+    [Header("Dash info")]
+    [SerializeField] private float dashSpeed;
+    [SerializeField] private float dashDuration;
+    [SerializeField] private float dashTime;
+
     private float xInput;
 
     private int facingDir = 1;
@@ -35,6 +40,22 @@ public class Player : MonoBehaviour
         Movement();
         CheckInput();
         CollisionChecks();
+
+
+        // Decrement dashTime overtime to create a cooldown
+        dashTime -= Time.deltaTime; 
+
+        // DashTime will add positive values to the duration, and until it reach 0 again, we'll dash
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            dashTime = dashDuration;
+        }
+
+        if (dashTime > 0)
+        {
+            Debug.Log("I'm dashing");
+        }
+
         FlipController();
         AnimatorControllers();
     }
@@ -57,7 +78,17 @@ public class Player : MonoBehaviour
 
     private void Movement()
     {
-        rb.velocity = new Vector2(xInput * moveSpeed, rb.velocity.y);
+        // While dashTime don't hit 0, dash
+        if (dashTime > 0)
+        {
+            rb.velocity = new Vector2(xInput * dashSpeed, rb.velocity.y);
+        } 
+        else
+        {
+            rb.velocity = new Vector2(xInput * moveSpeed, rb.velocity.y);
+        }
+
+
     }
 
     private void Jump()
