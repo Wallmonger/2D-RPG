@@ -16,7 +16,10 @@ public class Player : MonoBehaviour
     [Header("Dash info")]
     [SerializeField] private float dashSpeed;
     [SerializeField] private float dashDuration;
-    [SerializeField] private float dashTime;
+    private float dashTime;
+
+    [SerializeField] private float dashCooldown;
+    private float dashCooldownTimer;
 
     private float xInput;
 
@@ -44,17 +47,7 @@ public class Player : MonoBehaviour
 
         // Decrement dashTime overtime to create a cooldown
         dashTime -= Time.deltaTime; 
-
-        // DashTime will add positive values to the duration, and until it reach 0 again, we'll dash
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            dashTime = dashDuration;
-        }
-
-        if (dashTime > 0)
-        {
-            Debug.Log("I'm dashing");
-        }
+        dashCooldownTimer -= Time.deltaTime;
 
         FlipController();
         AnimatorControllers();
@@ -74,6 +67,24 @@ public class Player : MonoBehaviour
         {
             Jump();
         }
+
+
+        // DashTime will add positive values to the duration, and until it reach 0 again, we'll dash
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            DashAbility();
+        }
+    }
+
+    private void DashAbility()
+    {
+        if (dashCooldownTimer < 0)
+        {
+            // Set the decrementing timer to the selected value of dashcoolDown and apply dash
+            dashCooldownTimer = dashCooldown;
+            dashTime = dashDuration;
+        }
+        
     }
 
     private void Movement()
