@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    // CTRL + R + R will rename all occurence of the word instead of doing ctrl + f
     // ALT + ENTER : Extract method to create function based on highlighted text
     // Right click and go to definition send to the function
     // ALT + ARROW UP : Put line in top
@@ -22,6 +23,8 @@ public class Player : MonoBehaviour
     private float dashCooldownTimer;
 
     [Header("Attack info")]
+    [SerializeField] private float comboTime = .3f;
+    private float comboTimeWindow;
     private bool isAttacking;
     private int comboCounter;
 
@@ -52,6 +55,7 @@ public class Player : MonoBehaviour
         // Decrement dashTime overtime to create a cooldown
         dashTime -= Time.deltaTime; 
         dashCooldownTimer -= Time.deltaTime;
+        comboTimeWindow -= Time.deltaTime;
 
         FlipController();
         AnimatorControllers();
@@ -60,6 +64,11 @@ public class Player : MonoBehaviour
     public void AttackOver()
     {
         isAttacking = false;
+        comboCounter++;
+
+        if (comboCounter > 2)
+            comboCounter = 0;
+        
     }
 
     private void CollisionChecks()
@@ -74,7 +83,11 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
+            if (comboTimeWindow < 0)
+                comboCounter = 0;
+
             isAttacking = true;
+            comboTimeWindow = comboTime;
         }
 
         if (Input.GetButtonDown("Jump"))
