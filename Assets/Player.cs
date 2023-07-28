@@ -83,11 +83,7 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            if (comboTimeWindow < 0)
-                comboCounter = 0;
-
-            isAttacking = true;
-            comboTimeWindow = comboTime;
+            StartAttackEvent();
         }
 
         if (Input.GetButtonDown("Jump"))
@@ -103,9 +99,21 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void StartAttackEvent()
+    {
+        if (!isGrounded)
+            return;
+
+        if (comboTimeWindow < 0)
+            comboCounter = 0;
+
+        isAttacking = true;
+        comboTimeWindow = comboTime;
+    }
+
     private void DashAbility()
     {
-        if (dashCooldownTimer < 0)
+        if (dashCooldownTimer < 0 && !isAttacking)
         {
             // Set the decrementing timer to the selected value of dashcoolDown and apply dash
             dashCooldownTimer = dashCooldown;
@@ -116,11 +124,17 @@ public class Player : MonoBehaviour
 
     private void Movement()
     {
+        // If i'm attacking, i'm not able to dash
+        if (isAttacking)
+        {
+            rb.velocity = new Vector2(0, 0);
+        }
+
         // While dashTime don't hit 0, dash
-        if (dashTime > 0)
+        else if (dashTime > 0)
         {
             // While dashing, increase speed on x axis, set y to 0 to fly temporarily
-            rb.velocity = new Vector2(xInput * dashSpeed, 0);
+            rb.velocity = new Vector2(facingDir * dashSpeed, 0);
         } 
         else
         {
