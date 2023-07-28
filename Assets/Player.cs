@@ -21,6 +21,10 @@ public class Player : MonoBehaviour
     [SerializeField] private float dashCooldown;
     private float dashCooldownTimer;
 
+    [Header("Attack info")]
+    private bool isAttacking;
+    private int comboCounter;
+
     private float xInput;
 
     private int facingDir = 1;
@@ -53,6 +57,11 @@ public class Player : MonoBehaviour
         AnimatorControllers();
     }
 
+    public void AttackOver()
+    {
+        isAttacking = true;
+    }
+
     private void CollisionChecks()
     {
         // Cast a ray against colliders in the scene (gameObject position, direction, max distance, LayerMask)
@@ -62,6 +71,11 @@ public class Player : MonoBehaviour
     private void CheckInput()
     {
         xInput = Input.GetAxisRaw("Horizontal");
+
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            isAttacking = true;
+        }
 
         if (Input.GetButtonDown("Jump"))
         {
@@ -121,6 +135,8 @@ public class Player : MonoBehaviour
 
         // Trigger animation when dashTime > 0
         anim.SetBool("isDashing", dashTime > 0);
+        anim.SetBool("isAttacking", isAttacking);
+        anim.SetInteger("comboCounter", comboCounter);
     }
 
     private void Flip()
