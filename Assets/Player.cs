@@ -59,7 +59,7 @@ public class Player : MonoBehaviour
 
     public void AttackOver()
     {
-        isAttacking = true;
+        isAttacking = false;
     }
 
     private void CollisionChecks()
