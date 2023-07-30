@@ -13,8 +13,14 @@ public class Entity : MonoBehaviour
     [Header("Collision info")]
     [SerializeField] protected Transform groundCheck;
     [SerializeField] protected float groundCheckDistance;
+    [Space]
+    [SerializeField] protected Transform wallCheck;
+    [SerializeField] protected float wallCheckDistance;
     [SerializeField] protected LayerMask whatIsGround;
+
+
     protected bool isGrounded;
+    protected bool isWallDetected;
 
 
     protected virtual void Start()
@@ -32,6 +38,7 @@ public class Entity : MonoBehaviour
     {
         // Cast a ray against colliders in the scene (gameObject position, direction, max distance, LayerMask)
         isGrounded = Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, whatIsGround);
+        isWallDetected = Physics2D.Raycast(wallCheck.position, Vector2.right, wallCheckDistance * facingDir, whatIsGround);
     }
 
 
@@ -50,5 +57,6 @@ public class Entity : MonoBehaviour
     {
         // Drawing a line to the feet of the character
         Gizmos.DrawLine(groundCheck.position, new Vector3(groundCheck.position.x, groundCheck.position.y - groundCheckDistance));
+        Gizmos.DrawLine(wallCheck.position, new Vector3(wallCheck.position.x + wallCheckDistance * facingDir, wallCheck.position.y));
     }
 }
