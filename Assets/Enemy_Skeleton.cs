@@ -27,15 +27,16 @@ public class Enemy_Skeleton : Entity
 
         if (isPlayerDetected)
         {
+            // If the player is close to the mob, moving faster
             if (isPlayerDetected.distance > 1)
             {
-                rb.velocity = new Vector2(moveSpeed* 1.5f * facingDir, rb.velocity.y);
+                rb.velocity = new Vector2(moveSpeed * 1.5f * facingDir, rb.velocity.y);
                 Debug.Log("i can see the player");
                 isAttacking = false;
             }
             else
             {
-                Debug.Log("Attack !" + isPlayerDetected);
+                Debug.Log("Attack !" + isPlayerDetected.collider.gameObject.name);
                 isAttacking = true;
             }
         }
@@ -45,9 +46,16 @@ public class Enemy_Skeleton : Entity
             Flip();
         }
 
-        rb.velocity = new Vector2(moveSpeed * facingDir, rb.velocity.y);
+        Movement();
 
+    }
 
+    private void Movement()
+    {
+        if (!isAttacking) 
+        {
+            rb.velocity = new Vector2(moveSpeed * facingDir, rb.velocity.y);
+        }
     }
 
     protected override void CollisionChecks()
@@ -55,5 +63,13 @@ public class Enemy_Skeleton : Entity
         base.CollisionChecks();
 
         isPlayerDetected = Physics2D.Raycast(transform.position, Vector2.right, playerCheckDistance * facingDir, whatIsPlayer);
+    }
+
+    protected override void OnDrawGizmos()
+    {
+        base.OnDrawGizmos();
+
+        Gizmos.color = Color.blue;
+        Gizmos.DrawLine(transform.position, new Vector3(transform.position.x + playerCheckDistance * facingDir, transform.position.y));
     }
 }
